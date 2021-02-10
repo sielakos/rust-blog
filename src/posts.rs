@@ -2,6 +2,7 @@ use crate::format::format_markdown;
 use crate::templates::TEMPLATES;
 use anyhow::{Context, Result};
 use pulldown_cmark::{Event, Parser};
+use serde::Serialize;
 use std::{
     fs::{create_dir_all, read_dir, File},
     io::{Read, Write},
@@ -9,10 +10,11 @@ use std::{
 };
 use tera::Context as TeraContext;
 
+#[derive(Serialize, Debug, Clone)]
 pub struct Post {
-    content: String,
-    title: String,
-    filename: String,
+    pub content: String,
+    pub title: String,
+    pub filename: String,
 }
 
 impl Post {
@@ -84,10 +86,7 @@ pub fn read_posts(directory: &str) -> Result<impl Iterator<Item = Result<Post>>>
     Ok(res)
 }
 
-pub fn save_posts<I>(posts: I, directory: &str) -> Result<()>
-where
-    I: Iterator<Item = Result<Post>>,
-{
+pub fn save_posts(posts: &[Post], directory: &str) -> Result<()> {
     let directory = Path::new(directory);
 
     if !directory.exists() {
@@ -95,8 +94,6 @@ where
     }
 
     for post in posts {
-        let post = post?;
-
         post.save(directory)?;
     }
 

@@ -1,9 +1,11 @@
 #[macro_use]
 extern crate lazy_static;
 
+mod assets;
 mod build;
 mod format;
 mod highlight;
+mod index;
 mod posts;
 mod server;
 mod templates;

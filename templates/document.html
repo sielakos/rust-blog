@@ -1,9 +1,3 @@
-<html>
-  <head>
-    <title>{{title}}</title>
-    <meta charset="UTF-8">
-  </head>
-  <body>
-    {{content | safe}}
-  </body>
-</html>
+{% extends 'base.html' %}
+
+{% block content %}{{content | safe}}{% endblock content %}

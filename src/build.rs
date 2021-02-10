@@ -1,10 +1,14 @@
-use crate::posts;
+use crate::{assets, index, posts};
 use anyhow::Result;
+use fs_extra::dir::remove;
 
 pub fn build() -> Result<()> {
-    let iter = posts::read_posts("./inputs")?;
+    let posts = posts::read_posts("./inputs")?.collect::<Result<Vec<_>>>()?;
 
-    posts::save_posts(iter, "./outputs")?;
+    remove("./outputs")?;
+    posts::save_posts(&posts, "./outputs")?;
+    assets::copy_assets("./assets", "./outputs")?;
+    index::build_index(&posts)?;
 
     Ok(())
 }
