@@ -1,13 +1,21 @@
 #[macro_use]
 extern crate lazy_static;
 
+mod build;
 mod format;
 mod highlight;
 mod posts;
+mod server;
 mod templates;
+mod watch;
 
-fn main() {
-    let iter = posts::read_posts("./inputs").expect("Failed to read posts");
+#[actix_web::main]
+async fn main() {
+    build::build().expect("Failed to build");
 
-    posts::save_posts(iter, "./outputs").expect("Failed to save posts");
+    actix::spawn(async {
+        watch::watch(build::build).expect("failed to watch");
+    });
+
+    server::run().await.expect("failed to start server");
 }

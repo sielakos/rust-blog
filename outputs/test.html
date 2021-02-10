@@ -1,15 +1,32 @@
 <html>
   <head>
     <title>Jakiś tytuł</title>
+    <meta charset="UTF-8">
   </head>
   <body>
     <h1>Jakiś tytuł</h1>
 <p>Jakiś tekst</p>
 <pre style="background-color:#2b303b;">
-<span style="color:#b48ead;">var </span><span style="color:#bf616a;">x </span><span style="color:#c0c5ce;">= &quot;</span><span style="color:#a3be8c;">Test</span><span style="color:#c0c5ce;">&quot;;
+<span style="color:#c0c5ce;">#[</span><span style="color:#bf616a;">macro_use</span><span style="color:#c0c5ce;">]
+</span><span style="color:#b48ead;">extern crate</span><span style="color:#c0c5ce;"> lazy_static;
 </span><span style="color:#c0c5ce;">
-</span><span style="color:#b48ead;">function </span><span style="color:#8fa1b3;">double</span><span style="color:#c0c5ce;">(x) {
-</span><span style="color:#c0c5ce;">  </span><span style="color:#b48ead;">return </span><span style="color:#bf616a;">x </span><span style="color:#c0c5ce;">* </span><span style="color:#d08770;">2</span><span style="color:#c0c5ce;">;
+</span><span style="color:#b48ead;">mod </span><span style="color:#c0c5ce;">build;
+</span><span style="color:#b48ead;">mod </span><span style="color:#c0c5ce;">format;
+</span><span style="color:#b48ead;">mod </span><span style="color:#c0c5ce;">highlight;
+</span><span style="color:#b48ead;">mod </span><span style="color:#c0c5ce;">posts;
+</span><span style="color:#b48ead;">mod </span><span style="color:#c0c5ce;">server;
+</span><span style="color:#b48ead;">mod </span><span style="color:#c0c5ce;">templates;
+</span><span style="color:#b48ead;">mod </span><span style="color:#c0c5ce;">watch;
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">#[</span><span style="color:#bf616a;">actix_web</span><span style="color:#c0c5ce;">::</span><span style="color:#bf616a;">main</span><span style="color:#c0c5ce;">]
+</span><span style="color:#c0c5ce;">async </span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">main</span><span style="color:#c0c5ce;">() {
+</span><span style="color:#c0c5ce;">    build::build().</span><span style="color:#96b5b4;">expect</span><span style="color:#c0c5ce;">(&quot;</span><span style="color:#a3be8c;">Failed to build</span><span style="color:#c0c5ce;">&quot;);
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">    actix::spawn(async {
+</span><span style="color:#c0c5ce;">        watch::watch(build::build).</span><span style="color:#96b5b4;">expect</span><span style="color:#c0c5ce;">(&quot;</span><span style="color:#a3be8c;">failed to watch</span><span style="color:#c0c5ce;">&quot;);
+</span><span style="color:#c0c5ce;">    });
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">    server::run().await.</span><span style="color:#96b5b4;">expect</span><span style="color:#c0c5ce;">(&quot;</span><span style="color:#a3be8c;">failed to start server</span><span style="color:#c0c5ce;">&quot;);
 </span><span style="color:#c0c5ce;">}
 </span></pre>
 
