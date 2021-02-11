@@ -1,5 +1,4 @@
 use crate::format::format_markdown;
-use crate::templates::TEMPLATES;
 use anyhow::{Context, Result};
 use pulldown_cmark::{Event, Parser};
 use serde::Serialize;
@@ -8,7 +7,7 @@ use std::{
     io::{Read, Write},
     path::Path,
 };
-use tera::Context as TeraContext;
+use tera::{Context as TeraContext, Tera};
 
 #[derive(Serialize, Debug, Clone)]
 pub struct Post {
@@ -28,7 +27,7 @@ impl Post {
         Ok(())
     }
 
-    pub fn read(path: &Path) -> Result<Post> {
+    pub fn read(path: &Path, tera: &Tera) -> Result<Post> {
         let filename = path
             .file_stem()
             .context("There is no file name")?
@@ -48,7 +47,7 @@ impl Post {
         context.insert("content", &markdown);
         context.insert("title", &title);
 
-        let content = TEMPLATES.render("document.html", &context)?;
+        let content = tera.render("document.html", &context)?;
 
         Ok(Post {
             title,
@@ -76,18 +75,20 @@ impl Post {
     }
 }
 
-pub fn read_posts(directory: &str) -> Result<impl Iterator<Item = Result<Post>>> {
-    let res = read_dir(directory)?.map(|file| {
-        let file = file?;
+pub fn read_posts<I: AsRef<Path>>(directory: &I, tera: &Tera) -> Result<Vec<Post>> {
+    let res = read_dir(directory)?
+        .map(move |file| {
+            let file = file?;
 
-        Post::read(&file.path())
-    });
+            Post::read(&file.path(), tera)
+        })
+        .collect::<Vec<_>>();
 
-    Ok(res)
+    res.into_iter().collect::<Result<Vec<_>>>()
 }
 
-pub fn save_posts(posts: &[Post], directory: &str) -> Result<()> {
-    let directory = Path::new(directory);
+pub fn save_posts<I: AsRef<Path>>(posts: &[Post], directory: &I) -> Result<()> {
+    let directory = directory.as_ref();
 
     if !directory.exists() {
         create_dir_all(directory)?;

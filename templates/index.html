@@ -3,7 +3,9 @@
 {% block title %}Blog Index{% endblock title %}
 
 {% block content %}
-  {% for post in posts %}
-    <a href="{{post.filename}}.html">{{post.title}}</a>
-  {% endfor %}
+  <ul>
+    {% for post in posts %}
+      <li><a href="{{post.filename}}.html">{{post.title}}</a></li>
+    {% endfor %}
+  </ul>
 {% endblock content %}
