@@ -1,14 +1,10 @@
 # Sielakos blog code
 
-This is simply source code of my blog.
-Nothing fancy here just compiling markdown files to generate static blog page.
+This project has one goal create very basic and simplistic static page blog generator.
 
-To run locally use
+You it generates code for my personal blog sielakos.github.io
 
-```bash
-cargo run
-```
+As example of project structure you can take a look at
+https://github.com/sielakos/blog-source
 
-It will start local instance of blog on port 8080.
-It has file watchers for assets and inputs directory so it will rebuild each time any file is changed.
-
+Also it uses Tera template engine for .html templates that you can use to customize your page
