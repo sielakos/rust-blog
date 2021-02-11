@@ -2,7 +2,7 @@
 
 This project has one goal create very basic and simplistic static page blog generator.
 
-You it generates code for my personal blog sielakos.github.io
+You it generates code for my personal blog https://sielakos.github.io/
 
 As example of project structure you can take a look at
 https://github.com/sielakos/blog-source
